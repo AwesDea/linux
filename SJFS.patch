@@ -56,7 +56,7 @@ index a7bf32aab..3e4ea4b58 100644
 +			current_knowledge = tmpi + tmpii;
 +			tmp_p->previus_knowledge = current_knowledge;
 +			tmp_p->previus_spent = tmp_p->utime+tmp_p->stime;
-+			if(tmp_p->previus_knowledge < temp_n->previus_knowledge)
++			if(tmp_p->previus_knowledge < tmp_n->previus_knowledge)
 +			{
 +				tmp_n = tmp_p;
 +			}
