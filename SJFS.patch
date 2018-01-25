@@ -23,7 +23,7 @@ index a7bf32aab..0bcc18dfe 100644
 -
 -		return p;
 +		struct task_struct tmp_p;
-+		struct task_struct tmp_n = p;
++		struct task_struct tmp_n = *p;
 +		u64 current_knowledge;
 +		for_each_process(tmp_p) {
 +			tmp_p->current_knowledge = previus_knowledge*0.5 +  tmp_p->previus_spent*0.5;
@@ -34,7 +34,7 @@ index a7bf32aab..0bcc18dfe 100644
 +				tmp_n = tmp_p;
 +			}
 +		}
-+		return tmp_n;
++		return &tmp_n;
  	}
  
  again:
