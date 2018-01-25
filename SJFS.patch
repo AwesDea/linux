@@ -51,8 +51,8 @@ index a7bf32aab..3e4ea4b58 100644
 +		u64 current_knowledge;
 +		long unsigned int tmpi,tmpii;
 +		for_each_process(tmp_p) {
-+			tmpi = (int)(tmp_p->previus_knowledge*0.5);
-+			tmpii = (int)(tmp_p->utime + tmp_p->stime - tmp_p->previus_spent*0.5);
++			tmpi = tmp_p->previus_knowledge;
++			tmpii = tmp_p->utime + tmp_p->stime - tmp_p->previus_spent;
 +			current_knowledge = tmpi + tmpii;
 +			tmp_p->previus_knowledge = current_knowledge;
 +			tmp_p->previus_spent = tmp_p->utime+tmp_p->stime;
