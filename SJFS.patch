@@ -1,5 +1,5 @@
 diff --git a/include/linux/sched.h b/include/linux/sched.h
-index d2588263a..3d6335e9a 100644
+index d2588263a..2032fce37 100644
 --- a/include/linux/sched.h
 +++ b/include/linux/sched.h
 @@ -705,7 +705,8 @@ struct task_struct {
@@ -12,11 +12,35 @@ index d2588263a..3d6335e9a 100644
  	u64				utime;
  	u64				stime;
  #ifdef CONFIG_ARCH_HAS_SCALED_CPUTIME
+diff --git a/include/linux/sched.h.rej b/include/linux/sched.h.rej
+new file mode 100644
+index 000000000..5d66ff290
+--- /dev/null
++++ b/include/linux/sched.h.rej
+@@ -0,0 +1,18 @@
++***************
++*** 705,711 ****
++  
++  	/* CLONE_CHILD_CLEARTID: */
++  	int __user			*clear_child_tid;
++- 
++  	u64				utime;
++  	u64				stime;
++  #ifdef CONFIG_ARCH_HAS_SCALED_CPUTIME
++--- 705,712 ----
++  
++  	/* CLONE_CHILD_CLEARTID: */
++  	int __user			*clear_child_tid;
+++ 	u64				previus_spent=0;
+++ 	u64				previus_knowledge=0;
++  	u64				utime;
++  	u64				stime;
++  #ifdef CONFIG_ARCH_HAS_SCALED_CPUTIME
 diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index a7bf32aab..0bcc18dfe 100644
+index a7bf32aab..3e4ea4b58 100644
 --- a/kernel/sched/core.c
 +++ b/kernel/sched/core.c
-@@ -3227,8 +3227,19 @@ pick_next_task(struct rq *rq, struct task_struct *prev, struct rq_flags *rf)
+@@ -3227,8 +3227,22 @@ pick_next_task(struct rq *rq, struct task_struct *prev, struct rq_flags *rf)
  		/* Assumes fair_sched_class->next == idle_sched_class */
  		if (unlikely(!p))
  			p = idle_sched_class.pick_next_task(rq, prev, rf);
@@ -25,11 +49,14 @@ index a7bf32aab..0bcc18dfe 100644
 +		struct task_struct *tmp_p;
 +		struct task_struct *tmp_n = p;
 +		u64 current_knowledge;
++		long unsigned int tmpi,tmpii;
 +		for_each_process(tmp_p) {
-+			current_knowledge = (int)(tmp_p->previus_knowledge*0.5) + (int)((tmp_p->utime + tmp_p->stime  - tmp_p->previus_spent)*0.5);
++			tmpi = (int)(tmp_p->previus_knowledge*0.5);
++			tmpii = (int)(tmp_p->utime + tmp_p->stime - tmp_p->previus_spent*0.5);
++			current_knowledge = tmpi + tmpii;
 +			tmp_p->previus_knowledge = current_knowledge;
 +			tmp_p->previus_spent = tmp_p->utime+tmp_p->stime;
-+			if(tmp_p->previus_knowledge < tmp_n->previus_knowledge)
++			if(tmp_p->previus_knowledge < temp_n->previus_knowledge)
 +			{
 +				tmp_n = tmp_p;
 +			}
@@ -38,3 +65,39 @@ index a7bf32aab..0bcc18dfe 100644
  	}
  
  again:
+diff --git a/kernel/sched/core.c.rej b/kernel/sched/core.c.rej
+new file mode 100644
+index 000000000..ca9f08d06
+--- /dev/null
++++ b/kernel/sched/core.c.rej
+@@ -0,0 +1,30 @@
++***************
++*** 3227,3234 ****
++  		/* Assumes fair_sched_class->next == idle_sched_class */
++  		if (unlikely(!p))
++  			p = idle_sched_class.pick_next_task(rq, prev, rf);
++- 
++- 		return p;
++  	}
++  
++  again:
++--- 3227,3245 ----
++  		/* Assumes fair_sched_class->next == idle_sched_class */
++  		if (unlikely(!p))
++  			p = idle_sched_class.pick_next_task(rq, prev, rf);
+++ 		struct task_struct tmp_p;
+++ 		struct task_struct tmp_n = p;
+++ 		u64 current_knowledge;
+++ 		for_each_process(tmp_p) {
+++ 			tmp_p->current_knowledge = previus_knowledge*0.5 +  tmp_p->previus_spent*0.5;
+++ 			tmp_p->previus_knowledge = current_knowledge;
+++ 			tmp_p->previus_spent = tmp_p->utime+tmp_p->stime;
+++ 			if(tmp->previus_knowledge < temp_n->previus_knowledge)
+++ 			{
+++ 				tmp_n = tmp_p;
+++ 			}
+++ 		}
+++ 		return tmp_n;
++  	}
++  
++  again:
