@@ -1,7 +1,7 @@
 language: c
 sudo: true
 script:
-  - export REPO_ROOT="/home/travis/build/AwesDea/osp3"
+  - export REPO_ROOT="/home/travis/build/AwesDea/linux"
   - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
   - sudo apt update
   - sudo apt-get install linux-headers-$(uname -r)
