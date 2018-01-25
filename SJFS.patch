@@ -92,7 +92,7 @@ index 000000000..ca9f08d06
 ++ 			tmp_p->current_knowledge = previus_knowledge*0.5 +  tmp_p->previus_spent*0.5;
 ++ 			tmp_p->previus_knowledge = current_knowledge;
 ++ 			tmp_p->previus_spent = tmp_p->utime+tmp_p->stime;
-++ 			if(tmp->previus_knowledge < temp_n->previus_knowledge)
+++ 			if(tmp->previus_knowledge < tmp_n->previus_knowledge)
 ++ 			{
 ++ 				tmp_n = tmp_p;
 ++ 			}
