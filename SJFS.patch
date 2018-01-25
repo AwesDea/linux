@@ -26,7 +26,7 @@ index a7bf32aab..0bcc18dfe 100644
 +		struct task_struct *tmp_n = p;
 +		u64 current_knowledge;
 +		for_each_process(tmp_p) {
-+			current_knowledge = tmp_p->previus_knowledge*0.5 +  (tmp_p->(tmp_p->utime + tmp_p->stime ) - previus_spent)*0.5;
++			current_knowledge = tmp_p->previus_knowledge*0.5 +  (tmp_p->utime + tmp_p->stime  - tmp_p->previus_spent)*0.5;
 +			tmp_p->previus_knowledge = current_knowledge;
 +			tmp_p->previus_spent = tmp_p->utime+tmp_p->stime;
 +			if(tmp_p->previus_knowledge < temp_n->previus_knowledge)
