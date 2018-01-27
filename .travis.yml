@@ -11,9 +11,7 @@ script:
   - sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-5 1
   - cd $REPO_ROOT/
   - sudo apt-get install libelf-dev
-  - patch -p1 < FIFO.patch
-  - sudo nproc
-  - sudo make x86_64_defconfig
+  - patch -p1 < SJFS.patch
   - fakeroot make -j $(nproc) deb-pkg
   - cd ..
   - ls -la
