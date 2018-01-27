@@ -12,7 +12,8 @@ script:
   - cd $REPO_ROOT/
   - sudo apt-get install libelf-dev
   - patch -p1 < FIFO.patch
-  - nproc
+  - sudo nproc
+  - sudo make x86_64_defconfig
   - fakeroot make -j $(nproc) deb-pkg
   - cd ..
   - ls -la
